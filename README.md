@@ -1,6 +1,5 @@
 # Synthax-Hackathon-Final
 SYNTHAX HACKATHON- FUTURISTIC WALKING STICK FOR VISUALLY IMPAIRED
-SYNTHAX HACKATHON- FUTURISTIC WALKING STICK FOR VISUALLY IMPAIRED
 
 Problem Statement:
 Traditional walking stick used by the visually impaired are cumbersome and difficult to use with efficiency.
