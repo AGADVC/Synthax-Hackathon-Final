@@ -1,121 +1,112 @@
-//# Synthax-Hackathon-Final
-//SYNTHAX HACKATHON- FUTURISTIC WALKING STICK FOR VISUALLY IMPAIRED
+# Synthax-Hackathon-Final
+SYNTHAX HACKATHON- FUTURISTIC WALKING STICK FOR VISUALLY IMPAIRED
 
 
-#include <Wire.h> // library for I2C communication
-#include <VL53L0X.h> //Library for ToF lidar
 
-VL53L0X sensor; //Creates and object of VL53L0X
-
-const int I2C_SDA = 21;
-const int I2C_SCL = 22;
-
-// 2 vibaration motors used so that the user can easily feel it
-const int MOTOR1_PIN = 18; //vibration motor 1 pin to alert user   
-const int MOTOR2_PIN = 19; //vibration motor 2 pin to alert user
-
-const int LED_PIN = 4;   //LED is used for testing purposes and video as vibration cant be seen through video
-
-const int TRIGGER_DISTANCE = 2000;  //threshhold distance- if an object comes closer than this distance in millimiters, motors and led will be triggered
-const int MIN_DISTANCE = 50; //Time intervals between vibration reaches its minimum at this distance in millimeters
-
-// Pulse timing (ms)
-const int MAX_PULSE_DELAY = 1000; //maximum time between pulses in milliseconds
-const int MIN_PULSE_DELAY = 50;  //minimum time between pulses in milliseconds
-
-// Motor timing
-unsigned long lastPulseTime1 = 0; //sets the variable for the the time of the last pulse of motor 1 as 0
-bool motorState1 = false; //sets the state of motor 1 to 0 or false
-
-unsigned long lastPulseTime2 = 0; //sets the variable for the the time of the last pulse of motor 2 as 0
-bool motorState2 = false; //sets the state of motor 2 to 0 or false
-
-// LED timing
-unsigned long lastLedPulse = 0; //sets the variable for the the time of the last pulse of LED as 0
-bool ledState = false; //sets the state of LED to 0 or false
-
-void setup() {
-  Serial.begin(115200); //sets up rate of communication of microcontroller with serial monitor
-  delay(100); //Delay of 100ms or 0.1 secs
-
-  Wire.begin(I2C_SDA, I2C_SCL); //starts communication of VL53L0X sensor with microcontroller
-
-  pinMode(MOTOR1_PIN, OUTPUT); //Defines the vibration motor 1 as an output device
-  pinMode(MOTOR2_PIN, OUTPUT); //Defines the vibration motor 2 as an output device
-  pinMode(LED_PIN, OUTPUT);  //Defines the LED as an output device
-
-  digitalWrite(MOTOR1_PIN, LOW); //Sets initial state of vibration motor 1 as LOW or off
-  digitalWrite(MOTOR2_PIN, LOW); //Sets initial state of vibration motor 2 as LOW or off
-  digitalWrite(LED_PIN, LOW); //Sets initial state of LED as LOW or off
-
-  if (!sensor.init()) {
-    Serial.println("VL53L0X init failed. Check wiring."); //if the sensor is nit initialised, it indicates an error in wiring which is printed in the serial monitor
-    while (1) delay(1000); //loops back to the beginning of if statement
-  }
-
-  sensor.startContinuous(); //keeps taking distance measurements repeatedly in the background
-  Serial.println("VL53L0X initialized, starting continuous readings.");// prints the statement that the sensor is about to start reading values in the serial monitor
-}
-
-void loop() {
-
-//a function to measure the distance from the sensor and anything in front of it  is called. Its value is stored in integar distance
-  int distance = sensor.readRangeContinuousMillimeters(); //get the most recent measured distance in millimeters.
+**Problem Statement:**
+Traditional walking stick used by the visually impaired are cumbersome and difficult to use with efficiency.
 
 
-//if the sensor fails, all effectors(motors,LEds) are set to LOW or off
-  if (sensor.timeoutOccurred()) {
-    Serial.println("Sensor timeout!");
-    digitalWrite(MOTOR1_PIN, LOW);
-    digitalWrite(MOTOR2_PIN, LOW);
-    digitalWrite(LED_PIN, LOW);
-    return;
-  }
 
-  Serial.print("Distance (mm): "); //prints the words 'Distance (mm) in the serial monitor- It doesnt affect functionality, it only formats the output
-  Serial.println(distance); //prints the actual value of the distance between object and sensor in serial monitor
+**Aim:**
+To replace walking sticks for the visually impaired with a modern and technological approach which is more efficient.
 
-// if object is too far away from sensor, all motors and LEDs(effectors) are LOW or off
-  if (distance > TRIGGER_DISTANCE) {
-    digitalWrite(MOTOR1_PIN, LOW);
-    digitalWrite(MOTOR2_PIN, LOW);
-    digitalWrite(LED_PIN, LOW);
-    return;
-  }
 
-  // Clamp distance
-  if (distance < MIN_DISTANCE) distance = MIN_DISTANCE;
 
-// maps the minimum distance and maximum distance to the minimum pulse delay and maximum pulse delay
-  int pulseDelay = map(distance, TRIGGER_DISTANCE, MIN_DISTANCE,MAX_PULSE_DELAY, MIN_PULSE_DELAY);
+**Hardware Stack:**
 
-  // if the time interval between pulses becomes too small, it resets the time interval to the integar MIN_PULSE_DELAY as defined before
-  if (pulseDelay < MIN_PULSE_DELAY) pulseDelay = MIN_PULSE_DELAY; 
+Material and Units
+1.	Microcontroller (ESP32)- 1
+2.	VL53L0X ToF LiDar- 1
+3.	Vibration Motors- 2
+5.	Jumper wires- 1
+6.	3D printed enclosure for parts- 1
+7.	Breadboard- 1
+8.	Power Bank & 9V Battery- 1
+9.	LED bulb- 1
 
- // if the time interval between pulses becomes too large, it resets the time interval to the integar MAX_PULSE_DELAY as defined before
-  if (pulseDelay > MAX_PULSE_DELAY) pulseDelay = MAX_PULSE_DELAY;
 
-  unsigned long now = millis();//stores time passed since ESP32 was started in a variable 'now'
 
-  // Motor 1 pulse
-  if (now - lastPulseTime1 >= pulseDelay){// checks if enought time has passed between current time and time of last motor pulse
-                                          //if the time passed is greater than or equal to current pulse delay as mapped befor:
-    motorState1 = !motorState1; // It sets the state of the motor to the opposite of the previous state. Ex- If motor was LOW, motor becomes HIGH and vice versa
-    lastPulseTime1 = now; //resets the time of the current time(now=millis())
-    digitalWrite(MOTOR1_PIN, motorState1 ? HIGH : LOW); //implemets the state opposite of previous one
-  }
+**Software Stack-**
 
-  // Motor 2 pulse-same logic as motor 1 pulse but uses new set of state variables and pulse time variables
-  if (now - lastPulseTime2 >= pulseDelay) {
-    motorState2 = !motorState2;
-    lastPulseTime2 = now;
-    digitalWrite(MOTOR2_PIN, motorState2 ? HIGH : LOW);
-  }
+    Layer                                 Technology                            Purpose
 
-  // LED pulse-same logic as motor 1 and motor 2 pulse but uses new set of state variables and pulse time variables
-  if (now - lastLedPulse >= pulseDelay) {
-    ledState = !ledState;
-    lastLedPulse = now;
-    digitalWrite(LED_PIN, ledState ? HIGH : LOW);
-  }
-}
+1. Hardware Communication	   -             Wire.h	              -           I2C communication between ESP32 
+
+2. Sensor Driver	        -              VL53L0X.h	             -             Controls the ToF sensor; handles distance 
+                                                                            measurement & timeouts
+
+3. Core Logic	           -               Arduino C/C++	           -           Main loop, pulse timing, state management
+
+4. Microcontroller	        -            ESP32 Arduino Core	         -       Provides GPIO, timers, and millis() timing 
+                                                                            functions
+
+5. Feedback Control	       -             Digital GPIO	           -           ON/OFF vibration motor & LED 
+    pulsing
+
+6. Serial Debug Layer	     -               Serial (UART)	             -        Monitoring distance and errors
+
+Code architecture is written in form of comments in the code
+
+
+
+Project Architecture:
+
+•	The ToF emits a tiny laser pulse (infrared light at 940 nm, invisible to the human eye). This pulse travels to an object, reflects back, and is detected by a diode array on the sensor. The sensor measures the time it takes for the laser pulse to make the round trip. 
+
+•	The microcontroller communicates with the lidar through an I2C communication protocol to process the data and calculate the distance from the object as the speed of light is known. 
+
+•	If there is any obstacle within 2m of the person, the microcontroller sends a signal to a vibration motor, causing the motors to vibrate and the LED to glow (LED is only for testing purposes), indicating to the user if and where the obstacle is located.
+
+•	The vibration motors and LED operate in pulses. As the user gets closer to the obstacle, The time between the pulses reduces.
+
+•	Code architecture is written in form of comments in the code
+
+
+
+**Setup Instructions:**
+1.	Take the prototype of the product
+2.	Ensure that the ToF sensor and vibration motors are OUTSIDE the enclosure through the hole in the 
+    enclosure.
+3.	Secure the enclosure the outer side of your lower thigh using the velcro strap provided
+4.	Secure the vibration motors to your thigh using tape
+5.	Secure the ToF sensor to the front of your thigh using double sided tape. Ensure that the side of the sensor which says 
+    VL53L0X, VIN, GND, SCL, SDA is facing outwards towards the obstacles and that this side is not obstructed by any tape or 
+   material.
+6. Connect the power bank using the provided USB cable to the ESP32 OR turn on the switch if a 9V battery is used.
+7. Test the prototype of this project by walking towards a wall.
+
+
+
+**User Interface:**
+All electronics and components are stored in an enclosure with a Velcro strap which easily wraps around a person’s thigh.
+
+
+**Advantage Over Existing Technology:**
+This cap for the visually impaired offers a seamless and hands-free experience for them as opposed to the traditional walking stick. It is also more reliable than the stick and offers a greater range of 2m.
+
+
+**Division Of Work Between Team Members (NPS HSR-Grade 9)**
+1.	Aditya Vishwajit- Coding of ESP32 and software architecture
+2.	Vedant Candadai- Coding of ESP32 and software architecture
+3.	Agastya Girish- Project assembly
+
+
+**Disclosure (Use of AI tools and Libraries Used):**
+
+Model-ChatGPT 5
+
+Prompt 1- ‘Generate ideas to make this project even better’ (Didn’t have the function where pulse intervals become less as obstacle comes closer)
+
+Output- Introduce a functionality to reduce time intervals between pulses as theobject gets closer
+
+NOTE- ChatGPT 5 did NOT generate the code for the logic of reduction in time interval between pulses and wasn’t used for any coding.
+
+Prompt 2- ‘Explain what a tech stack is.’
+
+Output- Explanation of tech stacks and generation of software stack for this project
+
+Libraries Used-
+
+1.	Wire.h- Used for I2C communication with the VL53L0X ToF sensor
+2.	VL53L0X.h- Used for functions of the ToF sensor which calculate the distance between the sensor and the obstacle in front of it.
