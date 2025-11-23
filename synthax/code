@@ -3,8 +3,8 @@
 
 VL53L0X sensor; //Creates and object of VL53L0X
 
-const int I2C_SDA = 21;
-const int I2C_SCL = 22;
+const int I2C_SDA = 21; //carries data between microcontroller and sensor using I2C
+const int I2C_SCL = 22; //provides clock signal that synchronises data transfer on I2C bus
 
 // 2 vibaration motors used so that the user can easily feel it
 const int MOTOR1_PIN = 18; //vibration motor 1 pin to alert user   
