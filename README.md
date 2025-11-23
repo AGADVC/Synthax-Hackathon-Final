@@ -68,7 +68,7 @@ Division Of Work Between Team Members (NPS HSR-Grade 9)
 
 Disclosure (Use of AI tools and Libraries Used):
 Model-ChatGPT 5
-Prompt 1- ‘Generate ideas to make this project even better’ (Didn’t have the function where pulse intervals become less as obstacle comes closer)- 
+Prompt 1- ‘Generate ideas to make this project even better’ (Didn’t have the function where pulse intervals become less as obstacle comes closer)
 Output- Introduce a functionality to reduce time intervals between pulses as theobject gets closer
 NOTE- ChatGPT 5 did NOT generate the code for the logic of reduction in time interval between pulses and wasn’t used for any coding.
 Prompt 2- ‘Explain what a tech stack is.’
@@ -76,5 +76,4 @@ Output- Explanation of tech stacks
 Libraries Used-
 1.	Wire.h- Used for I2C communication with the VL53L0X ToF sensor
 2.	VL53L0X.h- Used for functions of the ToF sensor which calculate the distance between the sensor and the obstacle in front of it.
-
 
