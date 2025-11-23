@@ -22,8 +22,7 @@ Sl.	Material and Units
 
 
 Software Stack-
-
-    Layer                        Technology 
+    Layer                                 Technology                            Purpose
 
 1. Hardware Communication	                Wire.h	                          I2C communication between ESP32 
 
