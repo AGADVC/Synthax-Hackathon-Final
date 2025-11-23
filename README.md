@@ -1,46 +1,70 @@
 # Synthax-Hackathon-Final
 SYNTHAX HACKATHON- FUTURISTIC WALKING STICK FOR VISUALLY IMPAIRED
 
-Problem Statement:
+
+
+**Problem Statement:**
 Traditional walking stick used by the visually impaired are cumbersome and difficult to use with efficiency.
 
-Aim:
+
+
+**Aim:**
 To replace walking sticks for the visually impaired with a modern and technological approach which is more efficient.
 
-Hardware Stack:
-
-Sl.	Material and Units
-1	Microcontroller (ESP32)- 1
-2	VL53L0X ToF LiDar- 1
-3	Vibration Motors- 2
-5	Jumper wires- 1
-6	3D printed enclosure for parts- 1
-7	Breadboard- 1
-8	Power Bank & 9V Battery- 1
-9	LED bulb- 1
 
 
-Software Stack-
+**Hardware Stack:**
+
+Material and Units
+1.	Microcontroller (ESP32)- 1
+2.	VL53L0X ToF LiDar- 1
+3.	Vibration Motors- 2
+5.	Jumper wires- 1
+6.	3D printed enclosure for parts- 1
+7.	Breadboard- 1
+8.	Power Bank & 9V Battery- 1
+9.	LED bulb- 1
+
+
+
+**Software Stack-**
+
     Layer                                 Technology                            Purpose
 
-1. Hardware Communication	                Wire.h	                          I2C communication between ESP32 
+1. Hardware Communication	   -             Wire.h	              -           I2C communication between ESP32 
 
-2. Sensor Driver	                      VL53L0X.h	                          Controls the ToF sensor; handles distance 
+2. Sensor Driver	        -              VL53L0X.h	             -             Controls the ToF sensor; handles distance 
                                                                             measurement & timeouts
 
-3. Core Logic	                          Arduino C/C++	                      Main loop, pulse timing, state management
+3. Core Logic	           -               Arduino C/C++	           -           Main loop, pulse timing, state management
 
-4. Microcontroller	                    ESP32 Arduino Core	                Provides GPIO, timers, and millis() timing 
+4. Microcontroller	        -            ESP32 Arduino Core	         -       Provides GPIO, timers, and millis() timing 
                                                                             functions
 
-5. Feedback Control	                    Digital GPIO	                      ON/OFF vibration motor & LED 
+5. Feedback Control	       -             Digital GPIO	           -           ON/OFF vibration motor & LED 
     pulsing
 
-Serial Debug Layer	                    Serial (UART)	                       Monitoring distance and errors
+6. Serial Debug Layer	     -               Serial (UART)	             -        Monitoring distance and errors
+
+Code architecture is written in form of comments in the code
+
+
+
+Project Architecture:
+
+•	The ToF emits a tiny laser pulse (infrared light at 940 nm, invisible to the human eye). This pulse travels to an object, reflects back, and is detected by a diode array on the sensor. The sensor measures the time it takes for the laser pulse to make the round trip. 
+
+•	The microcontroller communicates with the lidar through an I2C communication protocol to process the data and calculate the distance from the object as the speed of light is known. 
+
+•	If there is any obstacle within 2m of the person, the microcontroller sends a signal to a vibration motor, causing the motors to vibrate and the LED to glow (LED is only for testing purposes), indicating to the user if and where the obstacle is located.
+
+•	The vibration motors and LED operate in pulses. As the user gets closer to the obstacle, The time between the pulses reduces.
+
 •	Code architecture is written in form of comments in the code
 
 
-Setup Instructions:
+
+**Setup Instructions:**
 1.	Take the prototype of the product
 2.	Ensure that the ToF sensor and vibration motors are OUTSIDE the enclosure through the hole in the 
     enclosure.
@@ -53,18 +77,23 @@ Setup Instructions:
 7. Test the prototype of this project by walking towards a wall.
 
 
-User Interface:
+
+**User Interface:**
 All electronics and components are stored in an enclosure with a Velcro strap which easily wraps around a person’s thigh.
 
-Advantage Over Existing Technology:
+
+**Advantage Over Existing Technology:**
 This cap for the visually impaired offers a seamless and hands-free experience for them as opposed to the traditional walking stick. It is also more reliable than the stick and offers a greater range of 2m.
 
-Division Of Work Between Team Members (NPS HSR-Grade 9)
+
+**Division Of Work Between Team Members (NPS HSR-Grade 9)**
 1.	Aditya Vishwajit- Coding of ESP32 and software architecture
 2.	Vedant Candadai- Coding of ESP32 and software architecture
 3.	Agastya Girish- Project assembly
 
-Disclosure (Use of AI tools and Libraries Used):
+
+**Disclosure (Use of AI tools and Libraries Used):**
+
 Model-ChatGPT 5
 
 Prompt 1- ‘Generate ideas to make this project even better’ (Didn’t have the function where pulse intervals become less as obstacle comes closer)
@@ -75,7 +104,7 @@ NOTE- ChatGPT 5 did NOT generate the code for the logic of reduction in time int
 
 Prompt 2- ‘Explain what a tech stack is.’
 
-Output- Explanation of tech stacks
+Output- Explanation of tech stacks and generation of software stack for this project
 
 Libraries Used-
 
